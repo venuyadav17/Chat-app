@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
+from datetime import datetime
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -60,6 +61,26 @@ def signup(username: str = Form(...), email: str = Form(...), password: str = Fo
         })
 
 
+def _format_time(ts: str) -> str:
+    if not ts:
+        return ""
+    try:
+        # ts is stored as ISO string from datetime.now()
+        dt = datetime.fromisoformat(ts)
+        return dt.strftime("%H:%M")
+    except Exception:
+        return ts
+
+
+def _format_messages(messages):
+    formatted = []
+    for m in messages:
+        sender, receiver, msg = m[:3]
+        ts = m[3] if len(m) > 3 else ""
+        formatted.append([sender, receiver, msg, _format_time(ts)])
+    return formatted
+
+
 # ---------------- CHAT ----------------
 @app.get("/chat", response_class=HTMLResponse)
 def chat(
@@ -67,11 +88,30 @@ def chat(
     email: str,
     peer: str | None = None
 ):
-    users = [u for u in get_all_users() if u["email"] != email]
+    base_users = [u for u in get_all_users() if u["email"] != email]
+
+    # Attach last message preview and time per conversation
+    users = []
+    for u in base_users:
+        convo_messages = get_private_chat(email, u["email"])
+        last_text = ""
+        last_time = ""
+        if convo_messages:
+            last = convo_messages[-1]
+            last_text = last[2]
+            ts = last[3] if len(last) > 3 else ""
+            last_time = _format_time(ts)
+
+        users.append({
+            **u,
+            "last_message": last_text,
+            "last_time": last_time,
+        })
 
     messages = []
     if peer:
-        messages = get_private_chat(email, peer)
+        raw_messages = get_private_chat(email, peer)
+        messages = _format_messages(raw_messages)
 
     return templates.TemplateResponse(
         "chat.html",
@@ -105,5 +145,6 @@ def api_messages(me: str, peer: str):
     """
     Lightweight JSON endpoint for polling messages between two users.
     """
-    messages = get_private_chat(me, peer)
+    raw_messages = get_private_chat(me, peer)
+    messages = _format_messages(raw_messages)
     return JSONResponse({"messages": messages})

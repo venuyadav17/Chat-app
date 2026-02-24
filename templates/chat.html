@@ -35,8 +35,15 @@
           <div class="avatar">{{ u.username[0] | upper }}</div>
           <div class="contact-details">
             <div class="contact-name">{{ u.username }}</div>
-            <div class="contact-status">steeping...</div>
+            <div class="contact-status">
+              {{ u.last_message or '' }}
+            </div>
           </div>
+          {% if u.last_time %}
+          <div style="margin-left:auto; font-size:0.75rem; color: var(--text-secondary);">
+            {{ u.last_time }}
+          </div>
+          {% endif %}
         </a>
         {% endfor %}
       </div>
@@ -69,7 +76,7 @@
         {% set is_me = (m[0] == email) %}
         <div class="message {{ 'sent' if is_me else 'received' }}">
           <div class="message-text">{{ m[2] }}</div>
-          <div class="message-time">{{ m[3] if m|length > 3 else 'brewing...' }}</div>
+          <div class="message-time">{{ m[3] if m|length > 3 else '' }}</div>
         </div>
         {% endfor %}
       </div>
@@ -121,7 +128,7 @@
         messages.forEach((m) => {
           const sender = m[0];
           const text = m[2] || '';
-          const time = m.length > 3 ? m[3] : 'brewing...';
+          const time = m.length > 3 ? m[3] : '';
           const isMe = sender === currentEmail;
 
           const msgDiv = document.createElement('div');
