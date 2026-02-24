@@ -91,12 +91,66 @@
 
   <script>
     const container = document.getElementById('msg-container');
+
     const scrollToBottom = () => {
       if (container) {
         container.scrollTop = container.scrollHeight;
       }
     };
+
     window.onload = scrollToBottom;
+
+    // Lightweight polling to keep messages up to date
+    const currentEmail = {{ email | tojson }};
+    const currentPeer = {{ request.query_params.get('peer') | tojson }};
+
+    async function fetchMessages() {
+      if (!currentPeer || !container) {
+        return;
+      }
+
+      try {
+        const resp = await fetch(`/api/messages?me=${encodeURIComponent(currentEmail)}&peer=${encodeURIComponent(currentPeer)}`);
+        if (!resp.ok) return;
+
+        const data = await resp.json();
+        const messages = data.messages || [];
+
+        // Rebuild messages list
+        container.innerHTML = '';
+        messages.forEach((m) => {
+          const sender = m[0];
+          const text = m[2] || '';
+          const time = m.length > 3 ? m[3] : 'brewing...';
+          const isMe = sender === currentEmail;
+
+          const msgDiv = document.createElement('div');
+          msgDiv.className = 'message ' + (isMe ? 'sent' : 'received');
+
+          const textDiv = document.createElement('div');
+          textDiv.className = 'message-text';
+          textDiv.textContent = text;
+
+          const timeDiv = document.createElement('div');
+          timeDiv.className = 'message-time';
+          timeDiv.textContent = time;
+
+          msgDiv.appendChild(textDiv);
+          msgDiv.appendChild(timeDiv);
+          container.appendChild(msgDiv);
+        });
+
+        scrollToBottom();
+      } catch (e) {
+        // Ignore polling errors in UI
+        console.error(e);
+      }
+    }
+
+    if (currentPeer) {
+      // Poll every 3 seconds
+      setInterval(fetchMessages, 3000);
+    }
   </script>
 </body>
 

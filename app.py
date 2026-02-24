@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -97,3 +97,13 @@ def send_message(
         f"/chat?email={sender}&peer={receiver}",
         status_code=302
     )
+
+
+# ---------------- MESSAGES API (polling) ----------------
+@app.get("/api/messages")
+def api_messages(me: str, peer: str):
+    """
+    Lightweight JSON endpoint for polling messages between two users.
+    """
+    messages = get_private_chat(me, peer)
+    return JSONResponse({"messages": messages})
