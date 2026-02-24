@@ -97,14 +97,6 @@
       }
     };
     window.onload = scrollToBottom;
-
-    // Simple auto-refresh to show new messages without manual reload
-    const hasPeer = "{{ request.query_params.get('peer') or '' }}";
-    if (hasPeer) {
-      setInterval(() => {
-        window.location.reload();
-      }, 3000); // refresh every 3 seconds
-    }
   </script>
 </body>
 
