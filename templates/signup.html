@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join ChaiCharcha</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="auth-container">
+        <h2>Join the Charcha</h2>
+        <p class="auth-subtitle">Pull up a chair and start brewing conversations.</p>
+        {% if error %}
+        <div
+            style="background: rgba(255,0,0,0.1); border: 1px solid #ff4d4d; color: #ff4d4d; padding: 10px; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.85rem;">
+            {{ error }}
+        </div>
+        {% endif %}
+        <form action="/signup" method="post" class="auth-form">
+            <input name="username" type="text" placeholder="Your Name" required />
+            <input name="email" type="email" placeholder="Email Address" required />
+            <input name="password" type="password" placeholder="Create Password" required />
+            <button type="submit">Start Brewing</button>
+        </form>
+        <div class="auth-link">
+            Already have a spot? <a href="/">Log In</a>
+        </div>
+    </div>
+</body>
+
+</html>

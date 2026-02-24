@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+jinja2
+python-multipart
+certifi
+httplib2
+google-api-python-client
+google-auth
+google-auth-httplib2

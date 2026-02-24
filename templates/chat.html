@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChaiCharcha - Brew Conversations</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <div class="side-panel">
+      <div class="header">
+        <div class="user-info">
+          <div class="avatar">{{ email[0] | upper }}</div>
+          <span class="contact-name">Me</span>
+        </div>
+        <div class="header-actions">
+          <a href="/" style="color: var(--accent);" title="Leave the Charcha"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+      </div>
+
+      <div class="contact-list">
+        <div
+          style="padding: 10px; font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;">
+          Conversations</div>
+        {% for u in users %}
+        {% set is_peer = (u.email == (request.query_params.get('peer'))) %}
+        <a href="/chat?email={{ email }}&peer={{ u.email }}" class="contact-item {{ 'active' if is_peer }}">
+          <div class="avatar">{{ u.username[0] | upper }}</div>
+          <div class="contact-details">
+            <div class="contact-name">{{ u.username }}</div>
+            <div class="contact-status">steeping...</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Chat Window -->
+    <div class="chat-window">
+      <div class="header">
+        <div class="user-info">
+          {% if request.query_params.get('peer') %}
+          <div class="avatar">{{ request.query_params.get('peer')[0] | upper }}</div>
+          <span class="contact-name">{{ request.query_params.get('peer').split('@')[0] }}</span>
+          {% else %}
+          <span class="contact-name" style="color: var(--accent);">Pick a chair to start the Charcha</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="messages-container" id="msg-container">
+        {% if not request.query_params.get('peer') %}
+        <div
+          style="height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0.3; text-align: center;">
+          <i class="fas fa-mug-hot" style="font-size: 5rem; margin-bottom: 1rem;"></i>
+          <h2>ChaiCharcha</h2>
+          <p>Select a contact to start brewing conversations.</p>
+        </div>
+        {% endif %}
+
+        {% for m in messages %}
+        {% set is_me = (m[0] == email) %}
+        <div class="message {{ 'sent' if is_me else 'received' }}">
+          <div class="message-text">{{ m[2] }}</div>
+          <div class="message-time">{{ m[3] if m|length > 3 else 'brewing...' }}</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if request.query_params.get('peer') %}
+      <div class="input-area">
+        <form action="/send" method="post" class="input-form">
+          <input type="hidden" name="sender" value="{{ email }}">
+          <input type="hidden" name="receiver" value="{{ request.query_params.get('peer') }}">
+          <input name="message" class="message-input" placeholder="Brew a message..." autocomplete="off" required>
+          <button type="submit" class="send-btn">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    const container = document.getElementById('msg-container');
+    const scrollToBottom = () => {
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    };
+    window.onload = scrollToBottom;
+  </script>
+</body>
+
+</html>

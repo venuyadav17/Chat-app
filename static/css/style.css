@@ -1,0 +1,315 @@
+:root {
+    --bg-main: #1b1210;
+    /* Dark Roasted Bean */
+    --bg-chat: #261b18;
+    --bg-panel: #1b1210;
+    --bg-header: #352520;
+    --accent: #d4a373;
+    /* Ginger Chai */
+    --accent-dark: #bc6c25;
+    /* Earthy Brown */
+    --text-primary: #fefae0;
+    /* Cream */
+    --text-secondary: #dda15e;
+    /* Milky Tea */
+    --sent-msg: #603820;
+    /* Dark Cinnamon */
+    --received-msg: #352520;
+    /* Coffee */
+    --border: #4a342e;
+    --input-bg: #2d201c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Auth Pages (Login/Signup) */
+.auth-container {
+    background: var(--bg-header);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.auth-container h2 {
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+    font-size: 2rem;
+    letter-spacing: 1px;
+}
+
+.auth-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 0.9rem;
+    margin-bottom: 1.2rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    transition: border 0.3s;
+}
+
+.auth-form input:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 1rem;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #1b1210;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.auth-form button:hover {
+    background: var(--text-secondary);
+    transform: translateY(-2px);
+}
+
+.auth-link {
+    margin-top: 1.5rem;
+    color: var(--text-secondary);
+}
+
+.auth-link a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Chat Layout */
+.app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.side-panel {
+    width: 30%;
+    min-width: 320px;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-window {
+    flex: 1;
+    background: var(--bg-chat);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    height: 70px;
+    background: var(--bg-header);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    background: var(--accent-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-primary);
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Contact List */
+.contact-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    padding: 14px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.contact-item:hover {
+    background: rgba(212, 163, 115, 0.1);
+}
+
+.contact-item.active {
+    background: var(--bg-header);
+    border-left: 4px solid var(--accent);
+}
+
+.contact-details {
+    margin-left: 15px;
+}
+
+.contact-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.contact-status {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* Messages Area */
+.messages-container {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+    background-color: var(--bg-chat);
+    /* Subtle coffee stain texture effect would go here */
+}
+
+.message {
+    max-width: 70%;
+    padding: 10px 16px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    position: relative;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.message.sent {
+    background: var(--sent-msg);
+    margin-left: auto;
+    border-bottom-right-radius: 2px;
+    color: #fefae0;
+}
+
+.message.received {
+    background: var(--received-msg);
+    margin-right: auto;
+    border-bottom-left-radius: 2px;
+    border: 1px solid var(--border);
+}
+
+.message-text {
+    word-wrap: break-word;
+}
+
+.message-time {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-top: 6px;
+    opacity: 0.8;
+}
+
+/* Message Input Area */
+.input-area {
+    padding: 15px 25px;
+    background: var(--bg-header);
+    border-top: 1px solid var(--border);
+}
+
+.input-form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.message-input {
+    flex: 1;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    padding: 12px 20px;
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.3s;
+}
+
+.message-input:focus {
+    border-color: var(--accent);
+    background: var(--bg-chat);
+}
+
+.send-btn {
+    background: var(--accent);
+    border: none;
+    color: #1b1210;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.send-btn:hover {
+    background: var(--text-secondary);
+    transform: scale(1.1);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-dark);
+}

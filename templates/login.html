@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChaiCharcha - Login</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="auth-container">
+        <h2>ChaiCharcha</h2>
+        <p class="auth-subtitle">Where conversations brew like a perfect cup of tea.</p>
+        {% if request.query_params.get('signup_success') %}
+        <div
+            style="background: rgba(76, 175, 80, 0.1); border: 1px solid #4caf50; color: #4caf50; padding: 10px; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.85rem;">
+            Signup successful! Please log in.
+        </div>
+        {% endif %}
+        <form action="/login" method="post" class="auth-form">
+            <input name="email" type="email" placeholder="Email Address" required />
+            <input name="password" type="password" placeholder="Password" required />
+            <button type="submit">Enter the Charcha</button>
+        </form>
+        <div class="auth-link">
+            New here? <a href="/signup">Join the Table</a>
+        </div>
+    </div>
+</body>
+
+</html>

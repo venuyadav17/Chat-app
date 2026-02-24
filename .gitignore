@@ -1,0 +1,14 @@
+__pycache__/
+.venv/
+env/
+*.pyc
+.DS_Store
+
+# Editor / OS
+.vscode/
+.idea/
+
+# Secrets and sensitive files
+.env
+service_account.json
+connection_output.txt
